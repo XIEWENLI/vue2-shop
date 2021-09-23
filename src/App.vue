@@ -4,7 +4,7 @@
       <Header></Header>
     </el-header>
     <el-main>
-      <div>Main</div>
+      <div>Main模块</div>
     </el-main>
     <el-footer>
       <Footer></Footer>
