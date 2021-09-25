@@ -1,9 +1,9 @@
 <template>
-  <div>
-    <h1>Footer组件</h1>
-  </div>
+  <div></div>
 </template>
 <script>
-export default {}
+export default {
+  name: 'Order'
+}
 </script>
 <style lang="less" scoped></style>
