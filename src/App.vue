@@ -4,28 +4,29 @@
       <Header></Header>
     </el-header>
     <el-main>
-      <div>Main模块</div>
+      <router-view></router-view>
     </el-main>
-    <el-footer>
-      <Footer></Footer>
-    </el-footer>
   </el-container>
 </template>
 <script>
-export default {}
+export default {
+  name: 'App',
+  methods: {},
+  components: {}
+}
 </script>
 
 <style lang="less" scoped>
-.el-header,
-.el-footer {
-  background-color: #b3c0d1;
-  color: #333;
+.el-header {
+  background-color: #fff;
+  color: #000;
   text-align: center;
-  line-height: 60px;
+  margin-bottom: 1px;
 }
 
 .el-main {
-  background-color: #e9eef3;
-  color: #333;
+  background-color: #fff;
+  width: 80%;
+  margin: 0 auto;
 }
 </style>
