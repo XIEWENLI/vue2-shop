@@ -40,6 +40,8 @@
   </div>
 </template>
 <script>
+// import eventBus from '../../utils/eventBus.js'
+
 export default {
   name: 'Detail',
   data() {
@@ -50,6 +52,7 @@ export default {
         '11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111'
     }
   },
+  created() {},
   methods: {
     add() {
       if (this.count <= this.sum) {
@@ -63,11 +66,15 @@ export default {
     },
     onSubmit() {},
     addShoppingCar() {},
+    // 跳转首页
     goBack() {
+      // activeDetail=1
+      this.select()
       this.$router.replace('/')
     }
   },
   watch: {
+    // 侦听商品数量
     count(newVal, oldVal) {
       if (newVal > this.sum) {
         this.count = this.sum

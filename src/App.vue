@@ -1,12 +1,5 @@
 <template>
-  <el-container>
-    <el-header>
-      <Header></Header>
-    </el-header>
-    <el-main>
-      <router-view></router-view>
-    </el-main>
-  </el-container>
+  <router-view></router-view>
 </template>
 <script>
 export default {
@@ -16,17 +9,4 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-.el-header {
-  background-color: #fff;
-  color: #000;
-  text-align: center;
-  margin-bottom: 1px;
-}
-
-.el-main {
-  background-color: #fff;
-  width: 80%;
-  margin: 0 auto;
-}
-</style>
+<style lang="less" scoped></style>
