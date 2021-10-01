@@ -27,23 +27,11 @@
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <el-badge :value="200" :max="99">
-            <el-button type="text">订单</el-button>
+            <el-button type="text">用户信息</el-button>
           </el-badge>
         </div>
         <div>
-          <el-table
-            ref="multipleTable"
-            :data="goodsList"
-            height="600"
-            style="width: 100%"
-          >
-            <el-table-column prop="_id" label="ID" width="120">
-            </el-table-column>
-            <el-table-column prop="_id" label="地址"> </el-table-column>
-            <el-table-column label="操作"
-              ><el-button>取消订单</el-button></el-table-column
-            >
-          </el-table>
+          <h1>Users组件</h1>
         </div>
       </el-card>
     </div>
@@ -56,7 +44,7 @@ export default {
     return {
       // 商品加载判断是否结束
       loading: false,
-      activeIndex: '3',
+      activeIndex: '4-1',
       count: 6,
       goodsList: [
         { _id: 1 },
@@ -81,6 +69,16 @@ export default {
   methods: {
     jumpDetail() {
       this.$router.push('/jumpDetail')
+    },
+    // 多选
+    toggleSelection() {
+      this.$refs.multipleTable.clearSelection()
+      console.log(this.multipleSelection)
+      console.log(11111111)
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val
+      console.log(this.multipleSelection)
     }
   }
 }

@@ -2,6 +2,9 @@
   margin: 0;
   padding: 0;
 }
+body {
+  background-color: #f1f3f4;
+}
 em,
 i {
   font-style: normal;
@@ -9,43 +12,10 @@ i {
 li {
   list-style: none;
 }
-img {
-  border: 0;
-  vertical-align: middle;
-}
+
 button {
   cursor: pointer;
 }
 a {
-  color: #666;
   text-decoration: none;
-}
-a:hover {
-  color: #c81623;
-}
-button,
-input {
-  font-family: Microsoft YaHei, Heiti SC, tahoma, arial, Hiragino Sans GB,
-    '\5B8B\4F53', sans-serif;
-}
-body {
-  -webkit-font-smoothing: antialiased;
-  background-color: #e0e0e0;
-  font: 12px/1.5 Microsoft YaHei, Heiti SC, tahoma, arial, Hiragino Sans GB,
-    '\5B8B\4F53', sans-serif;
-  color: #000;
-}
-.hide,
-.none {
-  display: none;
-}
-.clearfix:after {
-  visibility: hidden;
-  clear: both;
-  display: block;
-  content: '.';
-  height: 0;
-}
-.clearfix {
-  *zoom: 1;
 }

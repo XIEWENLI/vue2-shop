@@ -8,6 +8,8 @@ import 'element-ui/lib/theme-chalk/index.css'
 
 // css初始化样式
 import './assets/css/base.css'
+// css总体布局样式
+import './assets/css/container.css'
 
 // 组件
 import Header from './components/Header/Header.vue'

@@ -6,6 +6,9 @@ import Goods from '../views/Goods/Goods.vue'
 import Detail from '../views/Goods/Detail.vue'
 import ShoppingCar from '../views/ShoppingCar/ShoppingCar.vue'
 import Order from '../views/Order/Order.vue'
+import jumpUsers from '../views/Users/Users.vue'
+import Login from '../views/Login/Login.vue'
+import Register from '../views/Register/Register.vue'
 
 Vue.use(VueRouter)
 
@@ -13,7 +16,10 @@ const routes = [
   { path: '/', component: Goods },
   { path: '/jumpDetail', component: Detail },
   { path: '/jumpShoppingCar', component: ShoppingCar },
-  { path: '/jumpOrder', component: Order }
+  { path: '/jumpOrder', component: Order },
+  { path: '/jumpUsers', component: jumpUsers },
+  { path: '/jumpLogin', component: Login },
+  { path: '/jumpRegister', component: Register }
 ]
 
 const router = new VueRouter({
