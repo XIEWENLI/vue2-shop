@@ -1,18 +1,15 @@
 <template>
   <div>
-    <Header :activeI="activeIndex"> </Header>
-    <div class="container">
-      <!-- 商品展示列表 -->
-      <el-card class="box-card">
-        <div slot="header" class="clearfix">
-          <el-badge :value="200" :max="99">
-            <el-button type="text">用户信息</el-button>
-          </el-badge>
-        </div>
-        <div>
-          <h1>Users组件</h1>
-        </div>
-      </el-card>
+    <Header :activeI="activeIndex">
+      <template v-slot:SY>
+        <el-menu-item
+          style="margin-left: 2%;padding:0;font-size:28px;color:black;font-weight:bold"
+          >Admin页面</el-menu-item
+        >
+      </template>
+    </Header>
+    <div>
+      <h1>Admin组件</h1>
     </div>
   </div>
 </template>
@@ -23,7 +20,7 @@ export default {
     return {
       // 商品加载判断是否结束
       loading: false,
-      activeIndex: '1',
+      activeIndex: '',
       count: 6,
       goodsList: [
         { _id: 1 },

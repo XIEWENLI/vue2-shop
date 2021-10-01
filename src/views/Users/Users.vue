@@ -1,6 +1,16 @@
 <template>
   <div>
     <Header :activeI="activeIndex">
+      <!-- 首页 -->
+      <template v-slot:SY>
+        <el-menu-item index="1" style="margin-left: 1%;padding:0"
+          ><router-link
+            style="display:block;height:100%;width:100%;padding:0 20px 0 20px"
+            to="/"
+            >首页</router-link
+          ></el-menu-item
+        >
+      </template>
       <!-- 购物车 -->
       <template v-slot:SC>
         <el-menu-item index="2" style="padding:0"
@@ -20,6 +30,22 @@
             >订单</router-link
           ></el-menu-item
         >
+      </template>
+      <!-- 操作 -->
+      <template v-slot:CZ>
+        <el-submenu style="margin-left: 69%;" index="4">
+          <template slot="title">我的工作台</template>
+          <el-menu-item index="4-1"
+            ><router-link style="display:block;width:100%" to="/jumpUsers"
+              >个人信息</router-link
+            ></el-menu-item
+          >
+          <el-menu-item
+            ><router-link style="display:block;width:100%" to="/"
+              >退出</router-link
+            ></el-menu-item
+          >
+        </el-submenu>
       </template>
     </Header>
     <div class="container">

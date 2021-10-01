@@ -9,7 +9,8 @@ import Order from '../views/Order/Order.vue'
 import jumpUsers from '../views/Users/Users.vue'
 import Login from '../views/Login/Login.vue'
 import Register from '../views/Register/Register.vue'
-
+// 路由组件：admin
+import Admin from '../views/Admin/Admin.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -19,7 +20,9 @@ const routes = [
   { path: '/jumpOrder', component: Order },
   { path: '/jumpUsers', component: jumpUsers },
   { path: '/jumpLogin', component: Login },
-  { path: '/jumpRegister', component: Register }
+  { path: '/jumpRegister', component: Register },
+  // admin组件
+  { path: '/jumpAdmin', component: Admin }
 ]
 
 const router = new VueRouter({
