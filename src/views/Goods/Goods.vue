@@ -132,7 +132,7 @@ export default {
     }
   },
   methods: {
-    // //滑到底部时进行加载
+    // 滑到底部时进行加载
     load() {
       this.loading = true
       setTimeout(() => {

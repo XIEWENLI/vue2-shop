@@ -7,15 +7,27 @@
           >Admin页面</el-menu-item
         >
       </template>
+      <!-- 操作 -->
+      <template v-slot:CZ>
+        <el-submenu style="margin-left: 70%;" index="4">
+          <template slot="title">我的工作台</template>
+          <el-menu-item
+            ><router-link style="display:block;width:100%" to="/"
+              >退出</router-link
+            ></el-menu-item
+          >
+        </el-submenu>
+      </template>
     </Header>
-    <div>
-      <h1>Admin组件</h1>
-    </div>
+    <ul>
+      <li><Aside></Aside></li>
+      <li><router-view></router-view></li>
+    </ul>
   </div>
 </template>
 <script>
 export default {
-  name: 'ShoppingCar',
+  name: 'Admin',
   data() {
     return {
       // 商品加载判断是否结束
@@ -43,20 +55,28 @@ export default {
     }
   },
   methods: {
-    jumpDetail() {
-      this.$router.push('/jumpDetail')
-    },
-    // 多选
-    toggleSelection() {
-      this.$refs.multipleTable.clearSelection()
-      console.log(this.multipleSelection)
-      console.log(11111111)
-    },
-    handleSelectionChange(val) {
-      this.multipleSelection = val
-      console.log(this.multipleSelection)
+    // 滑到底部时进行加载
+    load() {
+      this.loading = true
+      setTimeout(() => {
+        this.loading = false
+        this.goodsList.push({ _id: (this.count += 1) })
+        console.log(11111)
+      }, 1000)
     }
   }
 }
 </script>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+ul {
+  // display: flex;
+  background-color: #fff;
+  height: 100%;
+  width: 100%;
+}
+
+ul li {
+  float: left;
+  height: 100%;
+}
+</style>
