@@ -11,10 +11,12 @@ import './assets/css/base.css'
 // css总体布局样式
 import './assets/css/container.css'
 
-// 组件
+// common组件
 import Header from './components/Header/Header.vue'
+import Aside from './components/Aaside/Aside.vue'
 
 Vue.component('Header', Header)
+Vue.component('Aside', Aside)
 
 // Vue插件
 Vue.use(ElementUI)

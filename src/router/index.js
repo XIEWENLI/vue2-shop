@@ -11,6 +11,9 @@ import Login from '../views/Login/Login.vue'
 import Register from '../views/Register/Register.vue'
 // 路由组件：admin
 import Admin from '../views/Admin/Admin.vue'
+import AdminUser from '../views/Admin/AdminUser.vue'
+import AdminGoods from '../views/Admin/AdminGoods.vue'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -22,7 +25,15 @@ const routes = [
   { path: '/jumpLogin', component: Login },
   { path: '/jumpRegister', component: Register },
   // admin组件
-  { path: '/jumpAdmin', component: Admin }
+  {
+    path: '/jumpAdmin',
+    component: Admin,
+    redirect: '/jumpAdmin/jumpAdminGoods',
+    children: [
+      { path: 'jumpAdminGoods', component: AdminGoods },
+      { path: 'jumpAdminUser', component: AdminUser }
+    ]
+  }
 ]
 
 const router = new VueRouter({
