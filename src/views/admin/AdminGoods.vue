@@ -1,6 +1,39 @@
 <template>
   <div class="AdminGoodsContainer">
-    <div class="search">123</div>
+    <!-- 搜索 -->
+    <div class="search">
+      <el-input
+        placeholder="请输入内容"
+        v-model="search"
+        clearable
+        class="search_input"
+      >
+      </el-input>
+      <el-button class="search_button" type="primary">搜索</el-button>
+      <el-button
+        class="search_button"
+        type="success"
+        style="margin-left:36%"
+        @click="addGoods = true"
+        >添加</el-button
+      >
+    </div>
+    <!-- 添加商品 -->
+    <div class="addGoods" v-if="addGoods">
+      <form action="" method="post">
+        <el-input
+          style="width:350px"
+          placeholder="请输入名称"
+          v-model="username"
+          clearable
+        >
+        </el-input
+        ><br />
+        <el-button type="primary" style="margin-top:30px">确认</el-button>
+        <el-button @click="addGoods = false">取消</el-button>
+      </form>
+    </div>
+    <!-- 列表 -->
     <div style="overflow:auto;" class="infinite-list-wrapper">
       <ul v-infinite-scroll="load" infinite-scroll-disabled="disabled">
         <li v-for="i in count" :key="i">
@@ -22,6 +55,10 @@ export default {
   name: 'AdminGoods',
   data() {
     return {
+      search: '',
+      drawer: false,
+      addGoods: true,
+      username: '',
       count: 10,
       loading: false
     }
@@ -54,7 +91,33 @@ export default {
 }
 
 .search {
+  position: relative;
   height: 50px;
+}
+
+.search_input {
+  width: 40%;
+  height: 100%;
+  margin-left: 20px;
+  margin-top: 5px;
+}
+
+.search_button {
+  margin-left: 25px;
+  margin-top: 5px;
+}
+
+.addGoods {
+  position: absolute;
+  width: 80%;
+  height: 610px;
+  z-index: 99;
+  background-color: red;
+}
+
+.addGoods form {
+  margin-top: 20px;
+  margin-left: 20px;
 }
 
 .infinite-list-wrapper {
