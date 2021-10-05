@@ -73,6 +73,7 @@ ul {
   background-color: #fff;
   height: 100%;
   width: 100%;
+  min-width: 1200px;
 }
 
 ul li {
