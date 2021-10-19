@@ -18,7 +18,13 @@
         >添加</el-button
       >
     </div>
-    <!-- 添加商品 -->
+    <!-- 商品列表标题 -->
+    <div class="bt">
+      <h3>1</h3>
+      <h3>2</h3>
+      <h3>3</h3>
+    </div>
+    <!-- 添加商品页面 -->
     <div class="addGoods" v-if="addGoods">
       <form action="" method="post">
         <el-input
@@ -33,7 +39,7 @@
         <el-button @click="addGoods = false">取消</el-button>
       </form>
     </div>
-    <!-- 列表 -->
+    <!-- 商品列表 -->
     <div style="overflow:auto;" class="infinite-list-wrapper">
       <ul v-infinite-scroll="load" infinite-scroll-disabled="disabled">
         <li v-for="i in count" :key="i">
@@ -57,7 +63,7 @@ export default {
     return {
       search: '',
       drawer: false,
-      addGoods: true,
+      addGoods: false,
       username: '',
       count: 10,
       loading: false
@@ -90,6 +96,7 @@ export default {
   height: 100%;
 }
 
+/* 搜索 */
 .search {
   position: relative;
   height: 50px;
@@ -107,10 +114,24 @@ export default {
   margin-top: 5px;
 }
 
+/* 商品列表标题 */
+.bt {
+  display: flex;
+  width: 80%;
+}
+
+.bt h3 {
+  display: inline-block;
+  width: 40px;
+  height: 10px;
+  text-align: center;
+}
+
+/* 添加商品页面 */
 .addGoods {
   position: absolute;
   width: 80%;
-  height: 610px;
+  height: 580px;
   z-index: 99;
   background-color: red;
 }
@@ -120,10 +141,11 @@ export default {
   margin-left: 20px;
 }
 
+/* 商品列表 */
 .infinite-list-wrapper {
   box-sizing: border-box;
   width: 100%;
-  height: 580px;
+  height: 540px;
   border: 2px solid #e0e0e0;
 }
 ul {

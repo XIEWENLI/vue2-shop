@@ -3,32 +3,33 @@
     <ul>
       <li>
         <div class="image">
-          <img
-            src="//img10.360buyimg.com/img/s200x200_jfs/t1/192470/16/8260/65365/60c85542E92717c48/5a933ad9808eee20.jpg!cc_100x100.webp"
-            alt="加载错误！！！"
-          />
+          <img :src="goods.goodsSRC" alt="加载错误！！！" />
         </div>
       </li>
       <li>
         <el-form label-width="100px">
           <el-form-item label="商品名字：">
-            <h2>手机</h2>
+            <h2>{{ goods.goodsName }}</h2>
           </el-form-item>
           <el-form-item label="商品详情：">
-            <p style="word-wrap:break-word; ">{{ detail }}</p>
+            <p style="word-wrap:break-word; ">{{ goods.goodsDetail }}</p>
           </el-form-item>
           <el-form-item label="商品总数：">
-            <p>{{ sum }}</p>
+            <p>{{ goods.goodsSum }}</p>
           </el-form-item>
-          <el-form-item label="商品数量：">
+          <el-form-item style="margin-left:-10px" label="购买数量:">
             <el-row>
               <el-button @click="reduce">-</el-button>
-              <el-input style="width:20%" type="number" v-model="count" />
+              <el-input
+                style="width:100px;margin-left:10px;margin-right:10px"
+                type="number"
+                v-model="buySum"
+              />
               <el-button @click="add">+</el-button>
             </el-row>
           </el-form-item>
-          <el-form-item label-width="0px">
-            <el-button type="primary" @click="onSubmit">立即购买</el-button>
+          <el-form-item label-width="30px">
+            <el-button type="primary" @click="onBuy">立即购买</el-button>
             <el-button type="danger" @click="addShoppingCar"
               >加入购物车</el-button
             >
@@ -40,47 +41,58 @@
   </div>
 </template>
 <script>
-// import eventBus from '../../utils/eventBus.js'
+import request from '../../utils/request'
 
 export default {
   name: 'Detail',
   data() {
     return {
-      sum: 50,
-      count: 1,
-      detail:
-        '11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111'
+      buySum: 1,
+      goods: {}
     }
   },
-  created() {},
+  created() {
+    this.getGoodsDetail()
+  },
   methods: {
+    // 获取商品信息
+    async getGoodsDetail() {
+      const _id = location.hash.split('?')[1].split('=')[1]
+      const { data: res } = await request.get('/getGoodsOne', {
+        params: {
+          _id: _id
+        }
+      })
+      this.goods = res.goods
+    },
+
+    // 商品购买数+1
     add() {
-      if (this.count <= this.sum) {
-        this.count += 1
+      if (this.buySum <= this.goods.goodsSum) {
+        this.buySum += 1
       }
     },
+    // 商品购买数-1
     reduce() {
-      if (this.count > 1) {
-        this.count -= 1
+      if (this.buySum > 1) {
+        this.buySum -= 1
       }
     },
-    onSubmit() {},
+    onBuy() {},
     addShoppingCar() {},
     // 跳转首页
     goBack() {
-      // activeDetail=1
-      this.select()
       this.$router.replace('/')
     }
   },
   watch: {
-    // 侦听商品数量
-    count(newVal, oldVal) {
-      if (newVal > this.sum) {
-        this.count = this.sum
+    // 侦听商品购买数量，不能<1或>总数
+    buySum(newVal, oldVal) {
+      if (newVal > this.goods.goodsSum) {
+        this.buySum = this.goods.goodsSum
       }
       if (newVal < 1) {
-        this.count = 1
+        this.buySum = 1
       }
     }
   }
@@ -89,7 +101,7 @@ export default {
 <style lang="less" scoped>
 .DetailContainer {
   width: 80%;
-  margin: 0 auto;
+  margin: 20px auto;
 }
 
 ul li {
@@ -98,7 +110,7 @@ ul li {
 }
 
 .el-form {
-  margin-top: 10px;
+  margin-top: 30px;
 }
 
 img {

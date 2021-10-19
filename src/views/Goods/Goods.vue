@@ -1,53 +1,7 @@
 <template>
   <div>
-    <Header :activeI="activeIndex" class="chacao">
-      <!-- 首页 -->
-      <template v-slot:SY>
-        <el-menu-item index="1" style="margin-left: 1%;padding:0"
-          ><router-link
-            style="display:block;height:100%;width:100%;padding:0 20px 0 20px"
-            to="/"
-            >首页</router-link
-          ></el-menu-item
-        >
-      </template>
-      <!-- 购物车 -->
-      <template v-slot:SC>
-        <el-menu-item index="2" style="padding:0"
-          ><router-link
-            style="display:block;height:100%;width:100%;padding:0 20px 0 20px"
-            to="/jumpShoppingCar"
-            >购物车</router-link
-          ></el-menu-item
-        >
-      </template>
-      <!-- 订单 -->
-      <template v-slot:OD>
-        <el-menu-item index="3" style="padding:0"
-          ><router-link
-            style="display:block;height:100%;width:100%;padding:0 20px 0 20px"
-            to="/jumpOrder"
-            >订单</router-link
-          ></el-menu-item
-        >
-      </template>
-      <!-- 操作 -->
-      <template v-slot:CZ>
-        <el-submenu style="margin-left: 69%;" index="4">
-          <template slot="title">我的工作台</template>
-          <el-menu-item index="4-1"
-            ><router-link style="display:block;width:100%" to="/jumpUsers"
-              >个人信息</router-link
-            ></el-menu-item
-          >
-          <el-menu-item
-            ><router-link style="display:block;width:100%" to="/"
-              >退出</router-link
-            ></el-menu-item
-          >
-        </el-submenu>
-      </template>
-    </Header>
+    <!-- 导航栏 -->
+    <Header :activeI="activeIndex"></Header>
     <div class="container">
       <!-- 首页轮播图 -->
       <el-card class="box-card">
@@ -66,22 +20,27 @@
           >
         </div>
         <div style="overflow:auto;height: 640px;margin-bottom: 20px;">
-          <ul v-infinite-scroll="load" infinite-scroll-disabled="disabled">
-            <li @click="jumpDetail" v-for="item in goodsList" :key="item._id">
-              <div class="image">
-                <img
-                  src="//img10.360buyimg.com/img/s200x200_jfs/t1/192470/16/8260/65365/60c85542E92717c48/5a933ad9808eee20.jpg!cc_100x100.webp"
-                  alt="加载错误！！！"
-                />
-              </div>
-              <div class="title">
-                <h2>{{ item._id }}</h2>
-              </div>
-              <div class="price">
-                <p><del>原价：123.00</del></p>
-                <p>现价：456.00</p>
-                <p>数量：456</p>
-              </div>
+          <ul
+            v-infinite-scroll="load"
+            infinite-scroll-disabled="disabled"
+            infinite-scroll-immediate="false"
+          >
+            <li v-for="item in goodsList" :key="item._id">
+              <router-link :to="'/jumpDetail?_id=' + item._id">
+                <div class="image">
+                  <img :src="item.goodsSRC" alt="加载错误！！！" />
+                </div>
+                <div class="title">
+                  <h2>{{ item.goodsName }}</h2>
+                </div>
+                <div class="price">
+                  <p>
+                    <del>原价：{{ item.goodsOldPrice }}</del>
+                  </p>
+                  <p>现价：{{ item.goodsPrice }}</p>
+                  <p>数量：{{ item.goodsSum }}</p>
+                </div>
+              </router-link>
             </li>
           </ul>
           <p v-if="loading" style="color:red">加载中...</p>
@@ -102,16 +61,14 @@ export default {
     return {
       // 商品加载判断是否结束
       loading: false,
+      // 导航栏选中状态
       activeIndex: '1',
-      count: 6,
-      goodsList: [
-        { _id: 1 },
-        { _id: 2 },
-        { _id: 3 },
-        { _id: 4 },
-        { _id: 5 },
-        { _id: 6 }
-      ],
+      // 数据库查询跳过前面 Skip 项
+      Skip: 0,
+      // 数据库中商品的总数
+      count: 0,
+      goodsList: [],
+      // 轮播图
       imgs: [
         'https://img11.360buyimg.com/n1/jfs/t1/179770/17/12742/145428/60e2ec6bE197a8dd5/fc13551194e20ba0.jpg',
         'https://img11.360buyimg.com/n1/jfs/t1/208131/34/1381/105367/614a9633Ea9c487bd/6cac5f26c55eacd6.jpg',
@@ -120,12 +77,13 @@ export default {
     }
   },
   created() {
-    // this.getGoods()
+    this.getGoods()
   },
   // 滑到底部时进行加载判断
   computed: {
+    // 大于等于商品总数时停止
     noMore() {
-      return this.goodsList.length >= 20
+      return this.goodsList.length >= this.count
     },
     disabled() {
       return this.loading || this.noMore
@@ -136,18 +94,22 @@ export default {
     load() {
       this.loading = true
       setTimeout(() => {
+        this.getGoods()
         this.loading = false
-        this.goodsList.push({ _id: (this.count += 1) })
-        console.log(11111)
       }, 1000)
     },
     // gooodsList商品数据请求
     async getGoods() {
-      const { data: res } = await request.get('/getGoods')
-      this.goodsList = res.data
-    },
-    jumpDetail() {
-      this.$router.push('/jumpDetail')
+      const { data: res } = await request.get('/getGoods', {
+        params: {
+          count: this.Skip
+        }
+      })
+      if (this.Skip <= this.count) {
+        this.Skip += 12
+      }
+      this.goodsList = [...this.goodsList, ...res.data]
+      this.count = res.goodsCount
     }
   }
 }
