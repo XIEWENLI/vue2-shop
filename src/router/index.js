@@ -40,4 +40,19 @@ const router = new VueRouter({
   routes
 })
 
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token')
+  if (
+    to.path === '/' ||
+    to.path === '/jumpLogin' ||
+    to.path === '/jumpRegister'
+  ) {
+    next()
+  } else if (token) {
+    next()
+  } else {
+    next('/jumpLogin') // 跳转了一样执行后面的语句
+  }
+})
+
 export default router
