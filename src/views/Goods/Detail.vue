@@ -78,8 +78,36 @@ export default {
         this.buySum -= 1
       }
     },
-    onBuy() {},
-    addShoppingCar() {},
+    // 商品购买
+    async onBuy() {
+      // const goodsId = location.hash.split('?')[1].split('=')[1]
+      // const tokenData = JSON.parse(localStorage.getItem('token'))
+      // const { data: res } = await request.post('/addShopping', {
+      //   userId: tokenData.userId,
+      //   goodsId
+      // })
+      // console.log(res)
+      console.log('未实现')
+    },
+    // 商品加入购物车
+    async addShoppingCar() {
+      const goodsId = location.hash.split('?')[1].split('=')[1]
+      const tokenData = JSON.parse(localStorage.getItem('token'))
+      const { data: res } = await request.post('/addShopping', {
+        userId: tokenData.userId,
+        goodsId,
+        buySum: this.buySum
+      })
+      console.log(res)
+      if (res.static) {
+        this.$message({
+          message: res.news,
+          type: 'success'
+        })
+      } else {
+        this.$message.error(res.news)
+      }
+    },
     // 跳转首页
     goBack() {
       this.$router.replace('/')

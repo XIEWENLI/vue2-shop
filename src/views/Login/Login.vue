@@ -56,7 +56,11 @@ export default {
           password: this.password
         })
         if (userData.data === this.username) {
-          localStorage.setItem('token', userData.data)
+          const tokenData = {
+            userId: userData.userId,
+            username: userData.data
+          }
+          localStorage.setItem('token', JSON.stringify(tokenData))
           this.$message({
             message: '欢迎您：' + userData.data,
             type: 'success'

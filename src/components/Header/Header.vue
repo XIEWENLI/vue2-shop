@@ -28,7 +28,7 @@
       <!-- 操作 -->
       <el-submenu style="margin-left: 69%;" index="4">
         <template slot="title"
-          ><h3 style="color:red">用户名：{{ username }}</h3>
+          ><h3 class="yh">用户名：{{ username }}</h3>
         </template>
         <div v-if="!tokenStatic">
           <el-menu-item index="4-1"
@@ -73,9 +73,9 @@ export default {
   methods: {
     dl() {
       // 登录
-      const username = localStorage.getItem('token')
-      if (username !== null) {
-        this.username = username
+      const userData = JSON.parse(localStorage.getItem('token'))
+      if (userData) {
+        this.username = userData.username
         this.tokenStatic = true
       }
     },
@@ -91,4 +91,13 @@ export default {
   }
 }
 </script>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.yh {
+  display: inline-block;
+  color: red;
+}
+
+.yh i {
+  color: red;
+}
+</style>
