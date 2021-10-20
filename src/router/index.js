@@ -41,14 +41,14 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token')
+  const tokenData = localStorage.getItem('token')
   if (
     to.path === '/' ||
     to.path === '/jumpLogin' ||
     to.path === '/jumpRegister'
   ) {
     next()
-  } else if (token) {
+  } else if (tokenData) {
     next()
   } else {
     next('/jumpLogin') // 跳转了一样执行后面的语句
