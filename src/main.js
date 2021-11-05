@@ -13,7 +13,7 @@ import './assets/css/container.css'
 
 // common组件
 import Header from './components/Header/Header.vue'
-import Aside from './components/Aaside/Aside.vue'
+import Aside from './components/Aside/Aside.vue'
 
 Vue.component('Header', Header)
 Vue.component('Aside', Aside)

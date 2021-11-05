@@ -1,24 +1,6 @@
 <template>
   <div>
-    <Header :activeI="activeIndex">
-      <template v-slot:SY>
-        <el-menu-item
-          style="margin-left: 2%;padding:0;font-size:28px;color:black;font-weight:bold"
-          >Admin页面</el-menu-item
-        >
-      </template>
-      <!-- 操作 -->
-      <template v-slot:CZ>
-        <el-submenu style="margin-left: 70%;" index="4">
-          <template slot="title">我的工作台</template>
-          <el-menu-item
-            ><router-link style="display:block;width:100%" to="/"
-              >退出</router-link
-            ></el-menu-item
-          >
-        </el-submenu>
-      </template>
-    </Header>
+    <div>123</div>
     <ul>
       <li><Aside></Aside></li>
       <li><router-view></router-view></li>
@@ -34,14 +16,7 @@ export default {
       loading: false,
       activeIndex: '',
       count: 6,
-      goodsList: [
-        { _id: 1 },
-        { _id: 2 },
-        { _id: 3 },
-        { _id: 4 },
-        { _id: 5 },
-        { _id: 6 }
-      ],
+      goodsList: [],
       // 选中的数组
       multipleSelection: []
     }

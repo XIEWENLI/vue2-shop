@@ -11,10 +11,13 @@
           <el-form-item label="商品名字：">
             <h2>{{ goods.goodsName }}</h2>
           </el-form-item>
+          <el-form-item label="商品价格：">
+            <h2 style="color:red">￥{{ goods.goodsPrice }}</h2>
+          </el-form-item>
           <el-form-item label="商品详情：">
             <p style="word-wrap:break-word; ">{{ goods.goodsDetail }}</p>
           </el-form-item>
-          <el-form-item label="商品总数：">
+          <el-form-item label="商品库存：">
             <p>{{ goods.goodsSum }}</p>
           </el-form-item>
           <el-form-item style="margin-left:-10px" label="购买数量:">
@@ -54,6 +57,44 @@ export default {
   created() {
     this.getGoodsDetail()
   },
+  watch: {
+    // 侦听商品购买数量，不能<1或>总数
+    buySum(newVal, oldVal) {
+      // 排除数量有e或E
+      const buySum = this.buySum.toString()
+      var arr = newVal.toString()
+      // 排除数量开头不是1-9
+      arr = arr.charAt(0)
+      if (newVal !== '') {
+        if (Number(newVal) > this.goods.goodsSum) {
+          this.buySum = this.goods.goodsSum
+        } else if (buySum.indexOf('e') === 1 || buySum.indexOf('E') === 1) {
+          this.$message({
+            type: 'error',
+            showClose: true,
+            duration: '1000',
+            message: '商品数量不合法！！！'
+          })
+          this.buySum = 1
+        } else if (arr.charCodeAt() <= 48 || arr.charCodeAt() > 57) {
+          this.$message({
+            type: 'error',
+            showClose: true,
+            duration: '1000',
+            message: '商品数量不合法！！！'
+          })
+          this.buySum = 1
+        }
+      } else {
+        this.$message({
+          type: 'error',
+          showClose: true,
+          duration: '1000',
+          message: '商品数量不合法！！！'
+        })
+      }
+    }
+  },
   methods: {
     // 获取商品信息
     async getGoodsDetail() {
@@ -68,60 +109,147 @@ export default {
 
     // 商品购买数+1
     add() {
-      if (this.buySum <= this.goods.goodsSum) {
+      const buySum = this.buySum.toString()
+      // +和-在buySum为空
+      if (buySum === '') {
+        this.buySum = 1
+      } else if (this.buySum < this.goods.goodsSum) {
+        this.buySum = parseInt(this.buySum)
         this.buySum += 1
       }
     },
     // 商品购买数-1
     reduce() {
-      if (this.buySum > 1) {
+      const buySum = this.buySum.toString()
+      // +和-在buySum为空
+      if (buySum === '') {
+        this.buySum = 1
+      } else if (this.buySum > 1) {
+        this.buySum = parseInt(this.buySum)
         this.buySum -= 1
       }
     },
     // 商品购买
-    async onBuy() {
-      // const goodsId = location.hash.split('?')[1].split('=')[1]
-      // const tokenData = JSON.parse(localStorage.getItem('token'))
-      // const { data: res } = await request.post('/addShopping', {
-      //   userId: tokenData.userId,
-      //   goodsId
-      // })
-      // console.log(res)
-      console.log('未实现')
+    onBuy() {
+      const buySum = this.buySum.toString()
+      if (buySum === '') {
+        this.$message({
+          type: 'error',
+          showClose: true,
+          duration: '1000',
+          message: '商品数量不合法！！！'
+        })
+        this.buySum = 1
+        return
+      }
+      this.$confirm(
+        '商品名称：<h3>' +
+          this.goods.goodsName +
+          '</h3>' +
+          '商品数量：<h3>' +
+          this.buySum +
+          '</h3>' +
+          '商品总价：<h3>' +
+          this.buySum * this.goods.goodsPrice +
+          '</h3>',
+        '商品信息',
+        {
+          confirmButtonText: '购买',
+          cancelButtonText: '取消',
+          dangerouslyUseHTMLString: true
+        }
+      )
+        .then(() => {
+          // 内嵌
+          this.$confirm(
+            '<h4">请付款:</h4>' +
+              '<h3 style="color:red">' +
+              this.buySum * this.goods.goodsPrice +
+              '</h3>',
+            '付款界面',
+            {
+              confirmButtonText: '确认',
+              cancelButtonText: '取消',
+              dangerouslyUseHTMLString: true
+            }
+          )
+            .then(async () => {
+              const res = await this.f(true)
+              if (res.state) {
+                this.$message({
+                  type: 'success',
+                  showClose: true,
+                  duration: '1000',
+                  message: '支付成功！'
+                })
+              }
+            })
+            .catch(async () => {
+              const res = await this.f(false)
+              if (res.state) {
+                this.$message({
+                  type: 'error',
+                  showClose: true,
+                  duration: '1000',
+                  message: '支付失败！'
+                })
+              }
+            })
+        })
+        .catch(() => {})
     },
-    // 商品加入购物车
-    async addShoppingCar() {
+    // order订单存储,this.onBuy()调用
+    async f(receiveStateVal) {
       const goodsId = location.hash.split('?')[1].split('=')[1]
       const tokenData = JSON.parse(localStorage.getItem('token'))
-      const { data: res } = await request.post('/addShopping', {
-        userId: tokenData.userId,
-        goodsId,
-        buySum: this.buySum
+      const { data: res } = await request.get('/addOrder', {
+        params: {
+          userId: tokenData.userId,
+          goodsId,
+          buySum: this.buySum,
+          payState: receiveStateVal,
+          deliverState: false,
+          receiveState: false
+        }
       })
-      console.log(res)
+      return res
+    },
+
+    // 商品加入购物车
+    async addShoppingCar() {
+      const buySum = this.buySum.toString()
+      if (buySum === '') {
+        this.$message({
+          type: 'error',
+          showClose: true,
+          duration: '1000',
+          message: '商品数量不合法！！！'
+        })
+        this.buySum = 1
+        return
+      }
+      // goods.vue传过来的location.hash值
+      const goodsId = location.hash.split('?')[1].split('=')[1]
+      const tokenData = JSON.parse(localStorage.getItem('token'))
+      const { data: res } = await request.get('/addShoppingCar', {
+        params: {
+          userId: tokenData.userId,
+          goodsId,
+          buySum: this.buySum
+        }
+      })
       if (res.static) {
         this.$message({
-          message: res.news,
-          type: 'success'
+          type: 'success',
+          showClose: true,
+          duration: '1000',
+          message: res.news
         })
-      } else {
-        this.$message.error(res.news)
       }
     },
     // 跳转首页
     goBack() {
       this.$router.replace('/')
-    }
-  },
-  watch: {
-    // 侦听商品购买数量，不能<1或>总数
-    buySum(newVal, oldVal) {
-      if (newVal > this.goods.goodsSum) {
-        this.buySum = this.goods.goodsSum
-      }
-      if (newVal < 1) {
-        this.buySum = 1
-      }
     }
   }
 }

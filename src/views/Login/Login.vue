@@ -1,5 +1,5 @@
 <template>
-  <div class="positionDiv">
+  <div class="positionDiv" v-loading="loadingStatic">
     <div class="tt"><h1>登录界面</h1></div>
     <div>
       <label for="username">账 号：</label>
@@ -35,6 +35,7 @@ export default {
   name: 'Login',
   data() {
     return {
+      loadingStatic: true,
       username: '',
       password: ''
     }
@@ -42,19 +43,33 @@ export default {
   created() {
     this.signIn()
   },
+  mounted() {
+    this.loadingStatic = false
+  },
+  destroyed() {
+    this.loadingStatic = true
+  },
   methods: {
     signIn() {
-      this.$message.error('请登录！！！')
+      const token = localStorage.getItem('token')
+      if (token === null) {
+        this.$message.error('请登录！！！')
+      }
     },
     // 登录
     async submin() {
+      this.loadingStatic = true
       if (this.username === '' || this.password === '') {
+        this.loadingStatic = false
         this.$message.error('用户名或密码不能为空！！！')
       } else if (this.username !== '' && this.password !== '') {
-        const { data: userData } = await request.post('/getUser', {
-          username: this.username,
-          password: this.password
+        const { data: userData } = await request.get('/getUser', {
+          params: {
+            username: this.username,
+            password: this.password
+          }
         })
+        // 这里的userData.data就是dt.username
         if (userData.data === this.username) {
           const tokenData = {
             userId: userData.userId,
@@ -67,6 +82,7 @@ export default {
           })
           this.$router.replace('/')
         } else {
+          this.loadingStatic = false
           this.$message.error(userData.data)
         }
       }
