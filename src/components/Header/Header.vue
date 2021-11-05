@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div class="Header">
     <el-menu :default-active="activeIndex" mode="horizontal">
       <!-- 首页 -->
       <el-menu-item index="1" style="margin-left: 1%;padding:0"
         ><router-link
-          style="display:block;height:100%;width:100%;padding:0 20px 0 20px"
+          style="display:block;height:100%;width:100%;padding:0 20px 0 20px;font-weight: bold;"
           to="/"
           >首页</router-link
         ></el-menu-item
@@ -12,7 +12,7 @@
       <!-- 购物车 -->
       <el-menu-item index="2" style="padding:0"
         ><router-link
-          style="display:block;height:100%;width:100%;padding:0 20px 0 20px"
+          style="display:block;height:100%;width:100%;padding:0 20px 0 20px;font-weight: bold;"
           to="/jumpShoppingCar"
           >购物车</router-link
         ></el-menu-item
@@ -20,13 +20,13 @@
       <!-- 订单 -->
       <el-menu-item index="3" style="padding:0"
         ><router-link
-          style="display:block;height:100%;width:100%;padding:0 20px 0 20px"
+          style="display:block;height:100%;width:100%;padding:0 20px 0 20px;font-weight: bold;"
           to="/jumpOrder"
           >订单</router-link
         ></el-menu-item
       >
-      <!-- 操作 -->
-      <el-submenu style="margin-left: 69%;" index="4">
+      <!-- 用户 -->
+      <el-submenu style="margin-left: 70%;" index="4">
         <template slot="title"
           ><h3 class="yh">用户名：{{ username }}</h3>
         </template>
@@ -68,10 +68,10 @@ export default {
     }
   },
   created() {
-    this.dl()
+    this.login()
   },
   methods: {
-    dl() {
+    login() {
       // 登录
       const userData = JSON.parse(localStorage.getItem('token'))
       if (userData) {
@@ -92,6 +92,10 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+.Header {
+  min-width: 1220px;
+}
+
 .yh {
   display: inline-block;
   color: red;

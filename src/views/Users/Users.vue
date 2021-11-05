@@ -1,18 +1,9 @@
 <template>
   <div>
     <Header :activeI="activeIndex"></Header>
+    <!-- 商品展示列表 -->
     <div class="container">
-      <!-- 商品展示列表 -->
-      <el-card class="box-card">
-        <div slot="header" class="clearfix">
-          <el-badge :value="200" :max="99">
-            <el-button type="text">用户信息</el-button>
-          </el-badge>
-        </div>
-        <div>
-          <h1>Users组件</h1>
-        </div>
-      </el-card>
+      <h1>user组件</h1>
     </div>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <div class="positionDiv">
+  <div class="positionDiv" v-loading="loadingStatic">
     <div class="tt"><h1>注册界面</h1></div>
     <div>
       <label for="username">账 号：</label>
@@ -44,32 +44,50 @@ export default {
   name: 'Login',
   data() {
     return {
+      loadingStatic: true,
       username: '',
       password: '',
       password2: ''
     }
   },
+  mounted() {
+    this.loadingStatic = false
+  },
+  destroyed() {
+    this.loadingStatic = true
+  },
   methods: {
     // 用户注册
     async submin() {
+      this.loadingStatic = true
       if (this.password === '' || this.password === '') {
+        this.loadingStatic = false
         this.$message.error('用户名或密码不能为空！！！')
       } else if (this.password === this.password2) {
-        const { data: userData } = await request.post('/setUser', {
+        const { data: userData } = await request.post('/addUser', {
           username: this.username,
           password: this.password
         })
+        this.loadingStatic = false
+        // 这里的userData.data就是dt.username
         if (userData.data === this.username) {
+          const tokenData = {
+            userId: userData.userId,
+            username: userData.data
+          }
+          localStorage.setItem('token', JSON.stringify(tokenData))
           this.$message({
             message: '欢迎您：' + userData.data,
             type: 'success'
           })
+          this.$router.replace('/')
         } else {
+          this.loadingStatic = false
           this.$message.error(userData.data)
         }
-        // this.$router.replace('/')
       } else {
-        this.$message.error('登录失败!!!')
+        this.loadingStatic = false
+        this.$message.error('密码和重复密码不一致！！！')
       }
     },
     reset() {

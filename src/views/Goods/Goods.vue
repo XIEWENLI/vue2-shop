@@ -2,7 +2,7 @@
   <div>
     <!-- 导航栏 -->
     <Header :activeI="activeIndex"></Header>
-    <div class="container">
+    <div class="container" v-loading="loadingStatic">
       <!-- 首页轮播图 -->
       <el-card class="box-card">
         <el-carousel indicator-position="outside">
@@ -14,10 +14,7 @@
       <!-- 商品展示列表 -->
       <el-card class="box-card">
         <div slot="header" class="clearfix">
-          <span>商品展示区域</span>
-          <el-button style="float: right; padding: 3px 0" type="text"
-            >操作按钮</el-button
-          >
+          <h3>商品展示区域</h3>
         </div>
         <div style="overflow:auto;height: 640px;margin-bottom: 20px;">
           <ul
@@ -59,9 +56,10 @@ export default {
   name: 'Goods',
   data() {
     return {
-      // 商品加载判断是否结束
+      loadingStatic: true,
+      // 商品下拉加载判断是否结束
       loading: false,
-      // 导航栏选中状态
+      // 导航栏选中
       activeIndex: '1',
       // 数据库查询跳过前面 Skip 项
       Skip: 0,
@@ -78,6 +76,9 @@ export default {
   },
   created() {
     this.getGoods()
+  },
+  disabled() {
+    this.loadingStatic = true
   },
   // 滑到底部时进行加载判断
   computed: {
@@ -110,6 +111,7 @@ export default {
       }
       this.goodsList = [...this.goodsList, ...res.data]
       this.count = res.goodsCount
+      this.loadingStatic = false
     }
   }
 }
