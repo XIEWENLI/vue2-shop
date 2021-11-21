@@ -60,6 +60,13 @@ export default {
     // 用户注册
     async submin() {
       this.loadingStatic = true
+      // 判断注册功能状态
+      const { data: ZCState } = await request.get('/getAdminZC')
+      if (ZCState.data === 'false') {
+        alert('注册功能已关闭，待开启状态！')
+        this.loadingStatic = false
+        return
+      }
       if (this.password === '' || this.password === '') {
         this.loadingStatic = false
         this.$message.error('用户名或密码不能为空！！！')

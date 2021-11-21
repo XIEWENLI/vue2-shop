@@ -26,7 +26,7 @@
         ></el-menu-item
       >
       <!-- 用户 -->
-      <el-submenu style="margin-left: 70%;" index="4">
+      <el-submenu class="yhdw" index="4">
         <template slot="title"
           ><h3 class="yh">用户名：{{ username }}</h3>
         </template>
@@ -57,6 +57,8 @@
   </div>
 </template>
 <script>
+import request from '@/utils/request.js'
+
 export default {
   name: 'Header',
   props: ['activeI'],
@@ -64,6 +66,7 @@ export default {
     return {
       activeIndex: this.activeI,
       username: '未登录',
+      // Header导航栏需要用
       tokenStatic: false
     }
   },
@@ -71,12 +74,23 @@ export default {
     this.login()
   },
   methods: {
-    login() {
+    async login() {
+      // 判断登录状态
+      const { data: DLSatate } = await request.get('/getAdminDL')
+      if (DLSatate.data === 'false') {
+        localStorage.removeItem('token')
+      }
       // 登录
       const userData = JSON.parse(localStorage.getItem('token'))
       if (userData) {
         this.username = userData.username
         this.tokenStatic = true
+      } else {
+        // 解决删除token后，页面不能及时刷新问题，减少每个页面都添加的工作量
+        const url = location.hash
+        if (url !== '#/') {
+          this.$router.replace('/jumpLogin')
+        }
       }
     },
     // 退出
@@ -93,7 +107,16 @@ export default {
 </script>
 <style lang="less" scoped>
 .Header {
-  min-width: 1220px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99;
+}
+
+.yhdw {
+  position: absolute;
+  right: 6%;
 }
 
 .yh {

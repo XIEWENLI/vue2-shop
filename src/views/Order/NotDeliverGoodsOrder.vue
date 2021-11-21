@@ -6,7 +6,7 @@
       ><router-link to="/"><el-button>去购物</el-button></router-link></el-empty
     >
     <!-- 购物车商品信息展示 -->
-    <goodsCommon v-else v-for="item in goodsList" :key="item.createAt">
+    <GoodsCommon v-else v-for="item in goodsList" :key="item.createAt">
       <!-- 图片 -->
       <template v-slot:goodsImg>
         <!-- lazy 开启懒加载 可视才加载 -->
@@ -34,19 +34,29 @@
       </template>
       <!-- 操作1 -->
       <template v-slot:goodsBtn
-        ><el-button type="danger" @click="onDelete(item.orderId)"
+        ><el-button
+          type="danger"
+          @click="
+            onDelete(
+              item._id,
+              item.orderId,
+              item.goodsSum,
+              item.buySum,
+              item.receiveState
+            )
+          "
           ><b>删除</b></el-button
         ></template
       >
       <!-- 操作2 -->
-      <template v-slot:goodsBuy><h2>待收货</h2></template>
-    </goodsCommon>
+      <template v-slot:goodsBuy><h2>待发货</h2></template>
+    </GoodsCommon>
   </div>
 </template>
 <script>
 import request from '@/utils/request.js'
-import goodsCommon from '@/components/goodsCommon/goodsCommon'
-import OrderSum from '@/components/goodsCommon/OrderSum'
+import GoodsCommon from '@/components/GoodsCommon/GoodsCommon'
+import OrderSum from '@/components/GoodsCommon/OrderSum'
 import eventBus from '@/utils/eventBus.js'
 
 export default {
@@ -63,7 +73,7 @@ export default {
     }
   },
   components: {
-    goodsCommon,
+    GoodsCommon,
     OrderSum
   },
   created() {
@@ -72,15 +82,14 @@ export default {
   methods: {
     // 获取全部订单
     async getGoods() {
-      eventBus.$emit('cl4', 4)
+      eventBus.$emit('cl3', 3)
       const token = JSON.parse(localStorage.getItem('token'))
-      // 工具用户_id，查订单表
-      const { data: res } = await request.get('/getNotReceiveGoodsOrder', {
+      // 按用户_id，查订单表
+      const { data: res } = await request.get('/getNotDeliverGoodsOrder', {
         params: {
           userId: token.userId,
           payState: true,
-          deliverState: true,
-          receiveState: false
+          deliverState: false
         }
       })
       // 用户id查询后，先判断res.goodsData的商品id是否为空
@@ -91,8 +100,18 @@ export default {
               _id: res.goodsData[i].goodsID
             }
           })
+          // 解决order表存在，而goods已经删除出现的报错问题
+          if (res2.goods === null) {
+            request.get('/deleteOrder', {
+              params: {
+                orderId: res.goodsData[i]._id
+              }
+            })
+            break
+          }
           res2.goods.buySum = res.goodsData[i].buySum
           res2.goods.orderId = res.goodsData[i]._id
+          res2.goods.receiveState = res.goodsData[i].receiveState
           this.goodsList.unshift(res2.goods)
         }
       }
@@ -100,7 +119,17 @@ export default {
       this.loadingStatic = false
     },
     // 删除订单
-    onDelete(orderId) {
+    async onDelete(goodsId, orderId, goodsSum, buySum, receiveState) {
+      // 判断登录状态
+      const { data: DLSatate } = await request.get('/getAdminDL')
+      if (DLSatate.data === 'false') {
+        localStorage.removeItem('token')
+      }
+      const token = JSON.parse(localStorage.getItem('token'))
+      if (!token) {
+        this.$router.replace('/jumpLogin')
+        return
+      }
       this.$confirm(
         '<h4">是否确认</h4>' + '<h3 style="color:red">' + '删除' + '</h3>',
         '确认删除界面',
@@ -111,6 +140,14 @@ export default {
         }
       )
         .then(() => {
+          if (receiveState === 'false') {
+            request.get('/updateGoodsSum', {
+              params: {
+                goodsId,
+                goodsSum: goodsSum + buySum
+              }
+            })
+          }
           request.get('deleteOrder', {
             params: {
               orderId
@@ -127,5 +164,7 @@ export default {
 <style lang="less" scoped>
 .AllOrderContainer {
   width: 80%;
+  position: relative;
+  top: 61px;
 }
 </style>

@@ -10,14 +10,18 @@ import jumpUsers from '@/views/Users/Users.vue'
 import Login from '@/views/Login/Login.vue'
 import Register from '@/views/Register/Register.vue'
 // Order侧边栏的路由
-import AllOrder from '@/components/Order/AllOrder.vue'
-import NoPayOrder from '@/components/Order/NoPayOrder.vue'
-import NotDeliverGoodsOrder from '@/components/Order/NotDeliverGoodsOrder.vue'
-import NotReceiveGoodsOrder from '@/components/Order/NotReceiveGoodsOrder.vue'
-// 路由组件：admin
-import Admin from '@/views/admin/admin.vue'
-import AdminUser from '@/views/admin/AdminUser.vue'
-import AdminGoods from '@/views/admin/AdminGoods.vue'
+import AllOrder from '@/views/Order/AllOrder.vue'
+import NoPayOrder from '@/views/Order/NoPayOrder.vue'
+import NotDeliverGoodsOrder from '@/views/Order/NotDeliverGoodsOrder.vue'
+import NotReceiveGoodsOrder from '@/views/Order/NotReceiveGoodsOrder.vue'
+// 路由组件：Admin
+import Admin from '@/views/Admin/Admin.vue'
+import AdminUser from '@/views/Admin/AdminUser.vue'
+import AdminGoods from '@/views/Admin/AdminGoods.vue'
+import AdminLogin from '@/views/Admin/AdminLogin.vue'
+import AdminOrder from '@/views/Admin/AdminOrder.vue'
+import AdminUpdateGoods from '@/views/Admin/AdminUpdateGoods.vue'
+import AdminAddGoods from '@/views/Admin/AdminAddGoods.vue'
 
 Vue.use(VueRouter)
 
@@ -28,6 +32,7 @@ const routes = [
   { path: '/jumpUsers', component: jumpUsers },
   { path: '/jumpLogin', component: Login },
   { path: '/jumpRegister', component: Register },
+  // order路由
   {
     path: '/jumpOrder',
     component: Order,
@@ -39,14 +44,18 @@ const routes = [
       { path: 'jumpNotReceiveGoodsOrder', component: NotReceiveGoodsOrder }
     ]
   },
-  // admin组件
+  // Admin路由
+  { path: '/jumpAdminLogin', component: AdminLogin },
+  { path: '/jumpAdminUpdateGoods', component: AdminUpdateGoods },
+  { path: '/jumpAdminAddGoods', component: AdminAddGoods },
   {
     path: '/jumpAdmin',
     component: Admin,
     redirect: '/jumpAdmin/jumpAdminGoods',
     children: [
       { path: 'jumpAdminGoods', component: AdminGoods },
-      { path: 'jumpAdminUser', component: AdminUser }
+      { path: 'jumpAdminUser', component: AdminUser },
+      { path: 'jumpAdminOrder', component: AdminOrder }
     ]
   }
 ]
@@ -57,12 +66,28 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const tokenData = localStorage.getItem('token')
+  const tokenAminData = localStorage.getItem('tokenAdmin')
   if (
     to.path === '/' ||
+    to.path === '/jumpDetail' ||
     to.path === '/jumpLogin' ||
-    to.path === '/jumpRegister'
+    to.path === '/jumpRegister' ||
+    to.path === '/jumpAdminLogin'
   ) {
     next()
+  } else if (
+    to.path === '/jumpAdmin' ||
+    to.path === '/jumpAdmin/jumpAdminGoods' ||
+    to.path === '/jumpAdmin/jumpAdminUser' ||
+    to.path === '/jumpAdmin/jumpAdminOrder' ||
+    to.path === '/jumpAdminUpdateGoods' ||
+    to.path === '/jumpAdminAddGoods'
+  ) {
+    if (tokenAminData) {
+      next()
+    } else {
+      next('/jumpAdminLogin')
+    }
   } else if (tokenData) {
     next()
   } else {

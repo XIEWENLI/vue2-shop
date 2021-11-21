@@ -1,54 +1,31 @@
 <template>
-  <div>
-    <div>123</div>
+  <div class="Admin">
     <ul>
-      <li><Aside></Aside></li>
+      <li><AsideAdmin></AsideAdmin></li>
       <li><router-view></router-view></li>
     </ul>
   </div>
 </template>
 <script>
 export default {
-  name: 'Admin',
   data() {
     return {
-      // 商品加载判断是否结束
-      loading: false,
-      activeIndex: '',
-      count: 6,
-      goodsList: [],
-      // 选中的数组
-      multipleSelection: []
+      name: 'Admin'
     }
   },
-  computed: {
-    noMore() {
-      return this.goodsList.length >= 20
-    },
-    disabled() {
-      return this.loading || this.noMore
-    }
-  },
-  methods: {
-    // 滑到底部时进行加载
-    load() {
-      this.loading = true
-      setTimeout(() => {
-        this.loading = false
-        this.goodsList.push({ _id: (this.count += 1) })
-        console.log(11111)
-      }, 1000)
-    }
-  }
+  methods: {}
 }
 </script>
 <style lang="less" scoped>
 ul {
-  // display: flex;
   background-color: #fff;
   height: 100%;
   width: 100%;
-  min-width: 1200px;
+}
+
+ul li:nth-child(2) {
+  margin-left: 200px;
+  margin-top: 57px;
 }
 
 ul li {

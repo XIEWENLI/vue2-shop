@@ -50,7 +50,7 @@
 </template>
 <script>
 // axios请求
-import request from '../../utils/request'
+import request from '@/utils/request.js'
 
 export default {
   name: 'Goods',
@@ -95,6 +95,9 @@ export default {
     load() {
       this.loading = true
       setTimeout(() => {
+        if (this.Skip < this.count) {
+          this.Skip += 12
+        }
         this.getGoods()
         this.loading = false
       }, 1000)
@@ -106,9 +109,6 @@ export default {
           count: this.Skip
         }
       })
-      if (this.Skip <= this.count) {
-        this.Skip += 12
-      }
       this.goodsList = [...this.goodsList, ...res.data]
       this.count = res.goodsCount
       this.loadingStatic = false

@@ -11,12 +11,15 @@ import './assets/css/base.css'
 // css总体布局样式
 import './assets/css/container.css'
 
-// common组件
+// user的common组件
 import Header from './components/Header/Header.vue'
-import Aside from './components/Aside/Aside.vue'
+// admin的common组件
+import AsideAdmin from './components/AdminCommon/AsideAdmin.vue'
+import HeaderAdmin from './components/AdminCommon/HeaderAdmin.vue'
 
 Vue.component('Header', Header)
-Vue.component('Aside', Aside)
+Vue.component('AsideAdmin', AsideAdmin)
+Vue.component('HeaderAdmin', HeaderAdmin)
 
 // Vue插件
 Vue.use(ElementUI)
