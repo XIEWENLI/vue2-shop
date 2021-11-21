@@ -33,7 +33,7 @@ export default {
     // 退出
     out() {
       localStorage.removeItem('tokenAdmin')
-      this.$router.replace('/jumpAdminLogin')
+      this.$router.go(0)
     }
   }
 }
