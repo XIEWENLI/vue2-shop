@@ -23,40 +23,56 @@ export default {
   },
   watch: {
     // 侦听商品购买数量，不能<1或>总数
-    buySum(newVal, oldVal) {
-      // 排除数量有e或E
-      const buySum = this.buySum.toString()
-      var arr = newVal.toString()
-      // 排除数量开头不是1-9
-      arr = arr.charAt(0)
-      if (newVal !== '') {
-        if (newVal > this.goodsSum) {
-          this.buySum = this.goodsSum
-        } else if (buySum.indexOf('e') === 1 || buySum.indexOf('E') === 1) {
-          this.$message({
-            type: 'error',
-            showClose: true,
-            duration: '1000',
-            message: '商品数量不合法！！！'
-          })
-          this.buySum = 1
-        } else if (arr.charCodeAt() <= 48 || arr.charCodeAt() > 57) {
-          this.$message({
-            type: 'error',
-            showClose: true,
-            duration: '1000',
-            message: '商品数量不合法！！！'
-          })
-          this.buySum = 1
+    async buySum(newVal, oldVal) {
+      // 判断登录状态
+      const { data: DLSatate } = await request.get('/getAdminDL')
+      if (DLSatate.data === 'false') {
+        localStorage.removeItem('token')
+      }
+      const token = JSON.parse(localStorage.getItem('token'))
+      if (!token) {
+        this.$router.replace('/jumpLogin')
+        return
+      }
+      if (this.goodsSum > 0) {
+        // 排除数量有e或E
+        const buySum = this.buySum.toString()
+        var arr = newVal.toString()
+        // 排除数量开头不是1-9
+        arr = arr.charAt(0)
+        if (newVal !== '') {
+          if (newVal > this.goodsSum) {
+            this.buySum = this.goodsSum
+          } else if (buySum.indexOf('e') === 1 || buySum.indexOf('E') === 1) {
+            this.$message({
+              type: 'error',
+              showClose: true,
+              duration: '1000',
+              message: '商品数量不合法！！！'
+            })
+            this.buySum = 1
+          } else if (arr.charCodeAt() <= 48 || arr.charCodeAt() > 57) {
+            this.$message({
+              type: 'error',
+              showClose: true,
+              duration: '1000',
+              message: '商品数量不合法！！！'
+            })
+            this.buySum = 1
+          } else {
+            this.setShoppingCarSum()
+          }
         } else {
-          this.setShoppingCarSum()
+          this.$message({
+            type: 'error',
+            showClose: true,
+            duration: '1000',
+            message: '商品数量不合法！！！'
+          })
         }
       } else {
-        this.$message({
-          type: 'error',
-          showClose: true,
-          duration: '1000',
-          message: '商品数量不合法！！！'
+        this.$alert('已无库存！', '提示', {
+          confirmButtonText: '确定'
         })
       }
     }
@@ -73,7 +89,6 @@ export default {
         this.buySum = parseInt(this.buySum)
         this.buySum += 1
       }
-      this.$emit('priceSumVal', this.buySum)
     },
     // 商品购买数-1
     reduce() {

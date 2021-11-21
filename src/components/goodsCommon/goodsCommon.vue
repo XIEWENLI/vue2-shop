@@ -21,7 +21,7 @@
 export default {
   data() {
     return {
-      name: 'goodsCommon'
+      name: 'GoodsCommon'
     }
   },
   methods: {}
@@ -42,7 +42,7 @@ export default {
 }
 
 .goodsDetail {
-  flex: 5;
+  flex: 5.5;
   min-width: 400px;
   display: flex;
   flex-direction: column;
@@ -68,7 +68,7 @@ h4 {
 }
 
 .goodsBuySum {
-  flex: 2;
+  flex: 1.5;
   display: flex;
   min-width: 240px;
   align-items: center;

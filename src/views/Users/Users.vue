@@ -3,11 +3,14 @@
     <Header :activeI="activeIndex"></Header>
     <!-- 商品展示列表 -->
     <div class="container">
-      <h1>user组件</h1>
+      <h2 style="padding:30px 0 30px 0">用户名：{{ username }}</h2>
+      <el-button @click="updateUser">修改用户信息</el-button>
     </div>
   </div>
 </template>
 <script>
+import request from '@/utils/request.js'
+
 export default {
   name: 'ShoppingCar',
   data() {
@@ -15,33 +18,57 @@ export default {
       // 商品加载判断是否结束
       loading: false,
       activeIndex: '4-1',
-      count: 6,
-      goodsList: [],
-      // 选中的数组
-      multipleSelection: []
+      username: ''
     }
   },
-  computed: {
-    noMore() {
-      return this.goodsList.length >= 20
-    },
-    disabled() {
-      return this.loading || this.noMore
-    }
+  created() {
+    this.getUser()
   },
   methods: {
-    jumpDetail() {
-      this.$router.push('/jumpDetail')
+    getUser() {
+      this.username = JSON.parse(localStorage.getItem('token')).username
     },
-    // 多选
-    toggleSelection() {
-      this.$refs.multipleTable.clearSelection()
-      console.log(this.multipleSelection)
-      console.log(11111111)
-    },
-    handleSelectionChange(val) {
-      this.multipleSelection = val
-      console.log(this.multipleSelection)
+    // 修改用户信息（用户名不能修改）
+    updateUser() {
+      this.$prompt('请输入原密码', '认证界面', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      })
+        .then(async ({ value }) => {
+          const { data: res } = await request.get('/getUser', {
+            params: {
+              username: this.username,
+              password: value
+            }
+          })
+          if (res.data === this.username) {
+            this.$prompt('请输入新密码', '修改界面', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消'
+            })
+              .then(async ({ value }) => {
+                const { data: res } = await request.get('/updateUser', {
+                  params: {
+                    username: this.username,
+                    password: value
+                  }
+                })
+                this.$message({
+                  type: 'success',
+                  message: res.data,
+                  duration: '1000'
+                })
+              })
+              .catch(() => {})
+          } else {
+            this.$message({
+              type: 'error',
+              message: res.data,
+              duration: '2000'
+            })
+          }
+        })
+        .catch(() => {})
     }
   }
 }

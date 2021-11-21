@@ -1,6 +1,6 @@
 <template>
   <div class="positionDiv" v-loading="loadingStatic">
-    <div class="tt"><h1>登录界面</h1></div>
+    <div class="tt"><h1>管理员-登录界面</h1></div>
     <div>
       <label for="username">账 号：</label>
       <el-input
@@ -21,18 +21,16 @@
     </div>
     <div class="tj">
       <el-button @click="submin">提交</el-button>
-      <el-button @click="reset">重置</el-button>
-      <el-button @click="jumpRegister">注册</el-button>
-      <el-button @click="jumpIndex">首页</el-button>
+      <el-button @click="jumpGoods">网站首页</el-button>
     </div>
   </div>
 </template>
 
 <script>
-import request from '../../utils/request'
+import request from '@/utils/request.js'
 
 export default {
-  name: 'Login',
+  name: 'AdminLogin',
   data() {
     return {
       loadingStatic: true,
@@ -51,7 +49,7 @@ export default {
   },
   methods: {
     signIn() {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('tokenAdmin')
       if (token === null) {
         this.$message({
           message: '请登录！',
@@ -63,13 +61,6 @@ export default {
     // 登录
     async submin() {
       this.loadingStatic = true
-      // 判断登录功能状态
-      const { data: DLState } = await request.get('/getAdminDL')
-      if (DLState.data === 'false') {
-        alert('登录功能已关闭，待开启状态！')
-        this.loadingStatic = false
-        return
-      }
       if (this.username === '' || this.password === '') {
         this.loadingStatic = false
         this.$message({
@@ -78,45 +69,32 @@ export default {
           duration: '1000'
         })
       } else if (this.username !== '' && this.password !== '') {
-        const { data: userData } = await request.get('/getUser', {
+        const { data: userData } = await request.get('/getAdmin', {
           params: {
             username: this.username,
             password: this.password
           }
         })
-        if (userData.isLogin) {
-          alert('你的登录权限被禁止了！')
-          this.loadingStatic = false
-          return
-        }
         // 这里的userData.data就是dt.username
         if (userData.data === this.username) {
-          const tokenData = {
+          const tokenAdminData = {
             userId: userData.userId,
             username: userData.data
           }
-          localStorage.setItem('token', JSON.stringify(tokenData))
+          localStorage.setItem('tokenAdmin', JSON.stringify(tokenAdminData))
           this.$message({
             message: '欢迎您：' + userData.data,
             type: 'success',
             duration: '1000'
           })
-          this.$router.replace('/')
+          this.$router.replace('/jumpAdmin')
         } else {
           this.loadingStatic = false
           this.$message.error(userData.data)
         }
       }
     },
-    // 重置
-    reset() {
-      this.username = ''
-      this.password = ''
-    },
-    jumpRegister() {
-      this.$router.replace('/jumpRegister')
-    },
-    jumpIndex() {
+    jumpGoods() {
       this.$router.replace('/')
     }
   }
@@ -131,7 +109,7 @@ export default {
 
 // 标题居中
 .tt {
-  width: 180px;
+  width: 238px;
   margin: 0 auto;
 }
 
