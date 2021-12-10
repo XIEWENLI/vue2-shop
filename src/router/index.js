@@ -74,6 +74,14 @@ router.beforeEach((to, from, next) => {
     to.path === '/jumpRegister' ||
     to.path === '/jumpAdminLogin'
   ) {
+    document.title = '手机商城'
+    if (to.path === '/jumpLogin') {
+      document.title = '登录'
+    } else if (to.path === '/jumpRegister') {
+      document.title = '注册'
+    } else if (to.path === '/jumpAdminLogin') {
+      document.title = '管理员登录'
+    }
     next()
   } else if (
     to.path === '/jumpAdmin' ||
@@ -83,12 +91,14 @@ router.beforeEach((to, from, next) => {
     to.path === '/jumpAdminUpdateGoods' ||
     to.path === '/jumpAdminAddGoods'
   ) {
+    document.title = '管理员界面'
     if (tokenAminData) {
       next()
     } else {
       next('/jumpAdminLogin')
     }
   } else if (tokenData) {
+    document.title = '手机商城'
     next()
   } else {
     next('/jumpLogin') // 跳转了一样执行后面的语句
