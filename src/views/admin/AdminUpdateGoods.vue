@@ -22,11 +22,11 @@
         <el-input v-model="goodsFrom.goodsSRC"></el-input>
       </el-form-item>
 
-      <el-form-item label="商品原价" prop="goodsPrice">
+      <el-form-item label="商品现价" prop="goodsPrice">
         <el-input v-model="goodsFrom.goodsPrice"></el-input>
       </el-form-item>
 
-      <el-form-item label="商品现价" prop="goodsOldPrice">
+      <el-form-item label="商品原价" prop="goodsOldPrice">
         <el-input v-model="goodsFrom.goodsOldPrice"></el-input>
       </el-form-item>
 
@@ -106,10 +106,11 @@ export default {
     },
     // 立即修改
     submitForm(goodsFrom) {
-      this.$refs[goodsFrom].validate(valid => {
+      this.$refs[goodsFrom].validate((valid) => {
         if (valid) {
           request.post('/updateGoods', this.goodsFrom)
           alert('修改成功！')
+          this.$router.replace('/jumpAdmin/jumpAdminGoods')
         } else {
           alert('必填项不能为空！')
           return false

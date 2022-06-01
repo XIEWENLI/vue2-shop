@@ -84,11 +84,11 @@ export default {
   methods: {
     // 立即添加
     submitForm(goodsFrom) {
-      this.$refs[goodsFrom].validate(valid => {
+      this.$refs[goodsFrom].validate((valid) => {
         if (valid) {
           request.post('/addGoodsOne', this.goodsFrom)
           alert('添加成功！')
-          this.resetForm('goodsFrom')
+          this.$router.replace('/jumpAdmin/jumpAdminGoods')
         } else {
           alert('必填项不能为空！')
           return false

@@ -21,7 +21,8 @@
       <template v-slot:goodsDetail>
         <h4>
           {{ item.goodsName }}
-          <i style="margin-left:20px">单价：￥{{ item.goodsPrice }}</i>
+          <i style="margin-left: 20px">单价：￥{{ item.goodsPrice }}</i>
+          <i style="margin-left: 20px">供应商：{{ item.supplierName }}</i>
         </h4>
         <p>{{ item.goodsDetail }}</p>
       </template>
@@ -53,8 +54,8 @@
         ><el-button
           v-if="
             item.payState === 'false' &&
-              item.deliverState === 'false' &&
-              item.receiveState === 'false'
+            item.deliverState === 'false' &&
+            item.receiveState === 'false'
           "
           type="success"
           @click="onBuy(item.orderId, item.buySum, item.goodsPrice)"
@@ -63,29 +64,29 @@
         <h2
           v-if="
             item.payState === 'true' &&
-              item.deliverState === 'false' &&
-              item.receiveState === 'false'
+            item.deliverState === 'false' &&
+            item.receiveState === 'false'
           "
         >
-          待发货
+          待审核
         </h2>
         <h2
           v-if="
             item.payState === 'true' &&
-              item.deliverState === 'true' &&
-              item.receiveState === 'false'
+            item.deliverState === 'true' &&
+            item.receiveState === 'false'
           "
         >
-          待签收
+          待验收
         </h2>
         <h2
           v-if="
             item.payState === 'true' &&
-              item.deliverState === 'true' &&
-              item.receiveState === 'true'
+            item.deliverState === 'true' &&
+            item.receiveState === 'true'
           "
         >
-          已签收
+          已验收
         </h2>
       </template>
     </GoodsCommon>
@@ -147,6 +148,7 @@ export default {
           }
           res2.goods.buySum = res.goodsData[i].buySum
           res2.goods.orderId = res.goodsData[i]._id
+          res2.goods.supplierName = res.goodsData[i].supplierName
           res2.goods.payState = res.goodsData[i].payState
           res2.goods.deliverState = res.goodsData[i].deliverState
           res2.goods.receiveState = res.goodsData[i].receiveState

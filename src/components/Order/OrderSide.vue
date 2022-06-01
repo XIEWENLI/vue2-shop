@@ -13,12 +13,12 @@
       </div>
       <div>
         <router-link :class="cl3" to="/jumpOrder/jumpNotDeliverGoodsOrder"
-          >待发货订单</router-link
+          >待审核订单</router-link
         >
       </div>
       <div>
         <router-link :class="cl4" to="/jumpOrder/jumpNotReceiveGoodsOrder"
-          >待收货订单</router-link
+          >待验收订单</router-link
         >
       </div>
     </div>
@@ -49,16 +49,16 @@ export default {
   methods: {
     // 侧边导航栏选中颜色
     BtnBG() {
-      eventBus.$on('cl1', val => {
+      eventBus.$on('cl1', (val) => {
         this.bgClass = val
       })
-      eventBus.$on('cl2', val => {
+      eventBus.$on('cl2', (val) => {
         this.bgClass = val
       })
-      eventBus.$on('cl3', val => {
+      eventBus.$on('cl3', (val) => {
         this.bgClass = val
       })
-      eventBus.$on('cl4', val => {
+      eventBus.$on('cl4', (val) => {
         this.bgClass = val
       })
       switch (this.bgClass) {

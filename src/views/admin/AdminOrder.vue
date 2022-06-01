@@ -3,9 +3,9 @@
     <!-- 头部导航栏 -->
     <HeaderAdmin>
       <template v-slot:search>
-        <div style="width:50%">
+        <div style="width: 50%">
           <el-input
-            style="width:40%;"
+            style="width: 40%"
             v-model="searchInput"
             placeholder="请输入用户名"
           ></el-input>
@@ -20,7 +20,7 @@
           <!-- lazy 开启懒加载 可视才加载 -->
           {{ index + 1 > 9 ? index + 1 : '0' + (index + 1) }}
           <el-image
-            style="width: 60px; height: 60px;"
+            style="width: 60px; height: 60px"
             :src="item.goodsSRC"
             fit="fit"
             lazy
@@ -28,11 +28,12 @@
         </template>
         <!-- 商品信息 -->
         <template v-slot:goodsDetail>
-          <h4>
+          <div style="font-weight: bold">
             用户名：{{ item.username }}
-            <i style="margin-left:20px">商品名：{{ item.goodsName }}</i>
-            <i style="margin-left:20px">现价：{{ item.goodsPrice }}</i>
-          </h4>
+            <i style="margin-left: 20px">商品名：{{ item.goodsName }}</i>
+            <i style="margin-left: 20px">现价：{{ item.goodsPrice }}</i>
+            <i style="margin-left: 20px">供应商：{{ item.supplierName }}</i>
+          </div>
           <p>{{ item.goodsDetail }}</p>
         </template>
         <!-- 数量 -->
@@ -41,7 +42,7 @@
             <li>数量：{{ item.buySum }}</li>
             <li>
               总价：
-              <b style="color:red">￥{{ item.buySum * item.goodsPrice }}</b>
+              <b style="color: red">￥{{ item.buySum * item.goodsPrice }}</b>
             </li>
           </ul>
         </template>
@@ -66,8 +67,8 @@
           <h2
             v-if="
               item.payState === 'false' &&
-                item.deliverState === 'false' &&
-                item.receiveState === 'false'
+              item.deliverState === 'false' &&
+              item.receiveState === 'false'
             "
           >
             未付款
@@ -76,29 +77,29 @@
             type="success"
             v-if="
               item.payState === 'true' &&
-                item.deliverState === 'false' &&
-                item.receiveState === 'false'
+              item.deliverState === 'false' &&
+              item.receiveState === 'false'
             "
             @click="deliverBtn(item._id)"
-            >发货</el-button
+            >通过</el-button
           >
           <h2
             v-if="
               item.payState === 'true' &&
-                item.deliverState === 'true' &&
-                item.receiveState === 'false'
+              item.deliverState === 'true' &&
+              item.receiveState === 'false'
             "
           >
-            待签收
+            待验收
           </h2>
           <h2
             v-if="
               item.payState === 'true' &&
-                item.deliverState === 'true' &&
-                item.receiveState === 'true'
+              item.deliverState === 'true' &&
+              item.receiveState === 'true'
             "
           >
-            已签收
+            已验收
           </h2>
         </template>
       </GoodsCommon>

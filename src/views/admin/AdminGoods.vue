@@ -3,15 +3,15 @@
     <!-- 头部导航栏 -->
     <HeaderAdmin>
       <template v-slot:search>
-        <div style="width:50%">
+        <div style="width: 50%">
           <el-input
-            style="width:40%;"
+            style="width: 40%"
             v-model="searchInput"
             placeholder="请输入商品名称"
           ></el-input>
           <el-button
             type="primary"
-            style="width:20%;max-width:80px;margin-left:10%"
+            style="width: 20%; max-width: 80px; margin-left: 10%"
             @click="add"
             >添加</el-button
           >
@@ -26,7 +26,7 @@
           <!-- lazy 开启懒加载 可视才加载 -->
           {{ index + 1 > 9 ? index + 1 : '0' + (index + 1) }}
           <el-image
-            style="width: 60px; height: 60px;"
+            style="width: 60px; height: 60px"
             :src="item.goodsSRC"
             fit="fit"
             lazy
@@ -36,9 +36,9 @@
         <template v-slot:goodsDetail>
           <h4>
             {{ item.goodsName }}
-            <i style="margin-left:20px">现价：{{ item.goodsPrice }}</i>
-            <i style="margin-left:20px">原价：{{ item.goodsOldPrice }}</i>
-            <i style="margin-left:20px">库存：{{ item.goodsSum }}</i>
+            <i style="margin-left: 20px">现价：{{ item.goodsPrice }}</i>
+            <i style="margin-left: 20px">原价：{{ item.goodsOldPrice }}</i>
+            <i style="margin-left: 20px">库存：{{ item.goodsSum }}</i>
           </h4>
           <p>{{ item.goodsDetail }}</p>
         </template>

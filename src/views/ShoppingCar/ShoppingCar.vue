@@ -24,8 +24,9 @@
         <template v-slot:goodsDetail>
           <h4>
             {{ item.goodsName }}
-            <i style="margin-left:30px">单价：{{ item.goodsPrice }}</i>
-            <i style="margin-left:30px">库存：{{ item.goodsSum }}</i>
+            <i style="margin-left: 30px">单价：{{ item.goodsPrice }}</i>
+            <i style="margin-left: 30px">库存：{{ item.goodsSum }}</i>
+            <i style="margin-left: 30px">供应商：{{ item.supplierName }}</i>
           </h4>
           <p>{{ item.goodsDetail }}</p>
         </template>
@@ -97,6 +98,7 @@ export default {
           userId: token.userId
         }
       })
+
       // 用户id查询后，先判断res.goodsData的商品id是否为空
       if (res.goodsData !== '') {
         for (let i = 0; i < res.goodsData.length; i++) {
@@ -105,6 +107,8 @@ export default {
               _id: res.goodsData[i].goodsID
             }
           })
+          // 加入供应商名
+          res2.goods.supplierName = res.goodsData[i].supplierName
           // 解决order表存在，而goods已经删除出现的报错问题
           if (res2.goods === null) {
             request.get('/deleteShoopingCar', {
@@ -187,7 +191,12 @@ export default {
                 })
               } else {
                 // order订单添加
-                const res2 = await this.f(goodsId, res.buySum, true)
+                const res2 = await this.f(
+                  goodsId,
+                  res.buySum,
+                  true,
+                  res.supplierName
+                )
                 // 购物车的订单删除
                 this.f2(shoppingCarId)
                 // 购买后（无论是否付款），修改库存 goodsSum
@@ -214,7 +223,12 @@ export default {
                   }
                 })
               } else {
-                const res2 = await this.f(goodsId, res.buySum, false)
+                const res2 = await this.f(
+                  goodsId,
+                  res.buySum,
+                  false,
+                  res.supplierName
+                )
                 // 购物车的订单删除
                 this.f2(shoppingCarId)
                 // 购买后（无论是否付款），修改库存 goodsSum
@@ -234,7 +248,7 @@ export default {
         .catch(() => {})
     },
     // order订单添加,this.onBuy()调用
-    async f(id, buySum, receiveStateVal) {
+    async f(id, buySum, receiveStateVal, supplierName) {
       const goodsId = id
       const tokenData = JSON.parse(localStorage.getItem('token'))
       const { data: res2 } = await request.get('/addOrder', {
@@ -242,6 +256,7 @@ export default {
           userId: tokenData.userId,
           goodsId,
           buySum,
+          supplierVal: supplierName,
           payState: receiveStateVal,
           deliverState: false,
           receiveState: false

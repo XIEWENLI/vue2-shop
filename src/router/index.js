@@ -22,6 +22,9 @@ import AdminLogin from '@/views/Admin/AdminLogin.vue'
 import AdminOrder from '@/views/Admin/AdminOrder.vue'
 import AdminUpdateGoods from '@/views/Admin/AdminUpdateGoods.vue'
 import AdminAddGoods from '@/views/Admin/AdminAddGoods.vue'
+import AdminSupplier from '@/views/Admin/AdminSupplier.vue'
+import AdminAddSupplier from '@/views/Admin/AdminAddSupplier.vue'
+import AdminUpdateSupplier from '@/views/Admin/AdminUpdateSupplier.vue'
 
 Vue.use(VueRouter)
 
@@ -48,6 +51,8 @@ const routes = [
   { path: '/jumpAdminLogin', component: AdminLogin },
   { path: '/jumpAdminUpdateGoods', component: AdminUpdateGoods },
   { path: '/jumpAdminAddGoods', component: AdminAddGoods },
+  { path: '/jumpAdminAddSupplier', component: AdminAddSupplier },
+  { path: '/jumpAdminUpdateSupplier', component: AdminUpdateSupplier },
   {
     path: '/jumpAdmin',
     component: Admin,
@@ -55,7 +60,8 @@ const routes = [
     children: [
       { path: 'jumpAdminGoods', component: AdminGoods },
       { path: 'jumpAdminUser', component: AdminUser },
-      { path: 'jumpAdminOrder', component: AdminOrder }
+      { path: 'jumpAdminOrder', component: AdminOrder },
+      { path: 'jumpAdminSupplier', component: AdminSupplier }
     ]
   }
 ]
@@ -88,8 +94,11 @@ router.beforeEach((to, from, next) => {
     to.path === '/jumpAdmin/jumpAdminGoods' ||
     to.path === '/jumpAdmin/jumpAdminUser' ||
     to.path === '/jumpAdmin/jumpAdminOrder' ||
+    to.path === '/jumpAdmin/jumpAdminSupplier' ||
     to.path === '/jumpAdminUpdateGoods' ||
-    to.path === '/jumpAdminAddGoods'
+    to.path === '/jumpAdminAddGoods' ||
+    to.path === '/jumpAdminAddSupplier' ||
+    to.path === '/jumpAdminUpdateSupplier'
   ) {
     document.title = '管理员界面'
     if (tokenAminData) {

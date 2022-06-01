@@ -12,19 +12,31 @@
             <h2>{{ goods.goodsName }}</h2>
           </el-form-item>
           <el-form-item label="商品价格：">
-            <h2 style="color:red">￥{{ goods.goodsPrice }}</h2>
+            <h2 style="color: red">￥{{ goods.goodsPrice }}</h2>
           </el-form-item>
           <el-form-item label="商品详情：">
-            <p style="word-wrap:break-word; ">{{ goods.goodsDetail }}</p>
+            <p style="word-wrap: break-word">{{ goods.goodsDetail }}</p>
           </el-form-item>
           <el-form-item label="商品库存：">
             <p>{{ goods.goodsSum }}</p>
           </el-form-item>
-          <el-form-item style="margin-left:-10px" label="购买数量:">
+          <el-form-item label="供应商名：">
+            <el-select v-model="supplierVal" placeholder="请选择">
+              <el-option
+                style="width: 100%"
+                v-for="item in suppliers"
+                :key="item.id"
+                :label="item.supplierName"
+                :value="item.supplierName"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item style="margin-left: -10px" label="购买数量:">
             <el-row>
               <el-button @click="reduce">-</el-button>
               <el-input
-                style="width:100px;margin-left:10px;margin-right:10px"
+                style="width: 100px; margin-left: 10px; margin-right: 10px"
                 type="number"
                 v-model="buySum"
               />
@@ -36,7 +48,9 @@
             <el-button type="danger" @click="addShoppingCar"
               >加入购物车</el-button
             >
-            <el-button style="margin-left:80px" @click="goBack">返回</el-button>
+            <el-button style="margin-left: 80px" @click="goBack"
+              >返回</el-button
+            >
           </el-form-item>
         </el-form>
       </li>
@@ -51,11 +65,15 @@ export default {
   data() {
     return {
       buySum: 1,
-      goods: {}
+      goods: {},
+      // 供应商
+      supplierVal: '123',
+      suppliers: []
     }
   },
   created() {
     this.getGoodsDetail()
+    this.getSuppliers()
   },
   watch: {
     // 侦听商品购买数量，不能<1或>总数
@@ -113,6 +131,13 @@ export default {
       this.goods = res.goods
     },
 
+    // 获取供应商列表
+    async getSuppliers() {
+      const suppliersData = await request.get('/getSuppliers')
+      this.suppliers = suppliersData.data
+      this.supplierVal = suppliersData.data[0].supplierName
+    },
+
     // 商品购买数+1
     add() {
       const buySum = this.buySum.toString()
@@ -161,6 +186,9 @@ export default {
       this.$confirm(
         '商品名称：<h3>' +
           this.goods.goodsName +
+          '</h3>' +
+          '供应商名：<h3>' +
+          this.supplierVal +
           '</h3>' +
           '商品数量：<h3>' +
           this.buySum +
@@ -253,6 +281,7 @@ export default {
           userId: tokenData.userId,
           goodsId,
           buySum: this.buySum,
+          supplierVal: this.supplierVal,
           payState: receiveStateVal,
           deliverState: false,
           receiveState: false
@@ -320,6 +349,7 @@ export default {
         params: {
           userId: tokenData.userId,
           goodsId,
+          supplierVal: this.supplierVal,
           buySum: this.buySum,
           goodsSum: this.goods.goodsSum
         }

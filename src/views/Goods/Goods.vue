@@ -4,19 +4,19 @@
     <Header :activeI="activeIndex"></Header>
     <div class="container" v-loading="loadingStatic">
       <!-- 首页轮播图 -->
-      <el-card class="box-card">
+      <!-- <el-card class="box-card" style="min-width: 900px">
         <el-carousel indicator-position="outside">
           <el-carousel-item v-for="item in imgs" :key="item">
             <img :src="item" alt="加载错误！！！" />
           </el-carousel-item>
         </el-carousel>
-      </el-card>
+      </el-card> -->
       <!-- 商品展示列表 -->
-      <el-card class="box-card">
+      <el-card class="box-card" style="min-width: 900px">
         <div slot="header" class="clearfix">
           <h3>商品展示区域</h3>
         </div>
-        <div style="overflow:auto;height: 640px;margin-bottom: 20px;">
+        <div style="overflow: auto; height: 640px; margin-bottom: 20px">
           <ul
             v-infinite-scroll="load"
             infinite-scroll-disabled="disabled"
@@ -40,8 +40,8 @@
               </router-link>
             </li>
           </ul>
-          <p v-if="loading" style="color:red">加载中...</p>
-          <p v-if="noMore" style="color:red">没有更多了</p>
+          <p v-if="loading" style="color: red">加载中...</p>
+          <p v-if="noMore" style="color: red">没有更多了</p>
         </div>
         <p v-if="!noMore">下拉更新加载更多！</p>
       </el-card>

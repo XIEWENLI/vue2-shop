@@ -11,6 +11,9 @@
       <li ref="click_bg3" @click="click_bg3">
         <router-link to="/jumpAdmin/jumpAdminOrder">订单管理</router-link>
       </li>
+      <li ref="click_bg4" @click="click_bg4">
+        <router-link to="/jumpAdmin/jumpAdminSupplier">供应商管理</router-link>
+      </li>
     </ul>
   </div>
 </template>
@@ -28,16 +31,25 @@ export default {
           this.$refs.click_bg.style.backgroundColor = '#007acc'
           this.$refs.click_bg2.style.backgroundColor = ''
           this.$refs.click_bg3.style.backgroundColor = ''
+          this.$refs.click_bg4.style.backgroundColor = ''
           break
         case '#/jumpAdmin/jumpAdminUser':
           this.$refs.click_bg.style.backgroundColor = ''
           this.$refs.click_bg2.style.backgroundColor = '#007acc'
           this.$refs.click_bg3.style.backgroundColor = ''
+          this.$refs.click_bg4.style.backgroundColor = ''
           break
         case '#/jumpAdmin/jumpAdminOrder':
           this.$refs.click_bg.style.backgroundColor = ''
           this.$refs.click_bg2.style.backgroundColor = ''
           this.$refs.click_bg3.style.backgroundColor = '#007acc'
+          this.$refs.click_bg4.style.backgroundColor = ''
+          break
+        case '#/jumpAdmin/jumpAdminSupplier':
+          this.$refs.click_bg.style.backgroundColor = ''
+          this.$refs.click_bg2.style.backgroundColor = ''
+          this.$refs.click_bg3.style.backgroundColor = ''
+          this.$refs.click_bg4.style.backgroundColor = '#007acc'
           break
       }
     },
@@ -51,6 +63,10 @@ export default {
     },
     // 订单
     click_bg3() {
+      this.getSelect()
+    },
+    // 供应商
+    click_bg4() {
       this.getSelect()
     }
   }

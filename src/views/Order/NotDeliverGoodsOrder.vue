@@ -21,7 +21,8 @@
       <template v-slot:goodsDetail>
         <h4>
           {{ item.goodsName }}
-          <i style="margin-left:20px">单价：￥{{ item.goodsPrice }}</i>
+          <i style="margin-left: 20px">单价：￥{{ item.goodsPrice }}</i>
+          <i style="margin-left: 20px">供应商：{{ item.supplierName }}</i>
         </h4>
         <p>{{ item.goodsDetail }}</p>
       </template>
@@ -49,7 +50,7 @@
         ></template
       >
       <!-- 操作2 -->
-      <template v-slot:goodsBuy><h2>待发货</h2></template>
+      <template v-slot:goodsBuy><h2>待审核</h2></template>
     </GoodsCommon>
   </div>
 </template>
@@ -111,6 +112,7 @@ export default {
           }
           res2.goods.buySum = res.goodsData[i].buySum
           res2.goods.orderId = res.goodsData[i]._id
+          res2.goods.supplierName = res.goodsData[i].supplierName
           res2.goods.receiveState = res.goodsData[i].receiveState
           this.goodsList.unshift(res2.goods)
         }
