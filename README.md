@@ -1,4 +1,4 @@
-# fruit-shop
+# vue2-store
 
 ## 安装依赖
 ```
